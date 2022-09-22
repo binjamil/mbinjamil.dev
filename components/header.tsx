@@ -5,7 +5,7 @@ export default function Header() {
   const [theme, setTheme] = useState<Theme>("");
 
   useEffect(() => {
-    const theme = window.localStorage.theme;
+    const theme = window.localStorage.theme ?? "light";
     setTheme(theme);
   }, []);
 
