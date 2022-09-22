@@ -1,36 +1,35 @@
 import Head from "next/head";
 import { GetStaticProps, NextPage } from "next";
-import Post from "../components/post";
-import { PostData, PostDataListProps } from "../types/postdata";
-import { GetPosts } from "../lib/postdata_api";
+import Header from "../components/header";
+import Footer from "../components/footer";
+import Script from "next/script";
 
-export const getStaticProps: GetStaticProps = async (_context) => {
-  // fetch list of posts
-  const posts: PostData[] = await GetPosts();
-  return {
-    props: {
-      postDataList: posts,
-    },
-  };
-};
-
-const IndexPage: NextPage<PostDataListProps> = ({
-  postDataList,
-}: PostDataListProps) => {
+const IndexPage: NextPage = () => {
   return (
-    <main className="m-4 sm:m-8">
+    <main className="">
       <Head>
         <title>Home page</title>
+        <meta charSet="UTF-8" />
       </Head>
 
-      <div className="mx-auto max-w-5xl">
-        <h1>List of posts</h1>
+      <div className="mx-auto max-w-5xl h-screen flex flex-col">
+        <Script strategy="beforeInteractive" src="/static/theme.js"></Script>
+        <Header />
 
-        <section>
-          {postDataList.map((post: PostData) => (
-            <Post {...post} key={post.id} />
-          ))}
-        </section>
+        <div className="flex justify-center items-center mx-4 sm:mx-8 h-full">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <h2 className="font-bold text-3xl sm:text-5xl">
+              Work in progress &#128640;
+            </h2>
+            <p>
+              Meanwhile hit me up on{" "}
+              <a className="text-indigo-500" href="mailto:contact@mbinjamil.dev">contact@mbinjamil.dev</a>{" "}
+              for any queries!
+            </p>
+          </div>
+        </div>
+
+        <Footer />
       </div>
     </main>
   );

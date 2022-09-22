@@ -5,11 +5,16 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        midnight: "#1A202C"
+      },
+    },
     fontFamily: {
-      sans: ["Montserrat", "sans-serif"],
-      title: ["Libre Baskerville", "serif"],
+      sans: ["IBM Plex Sans", "sans-serif"],
+      title: ["IBM Plex Serif", "serif"],
     },
   },
   plugins: [],
+  darkMode: 'class',
 };
