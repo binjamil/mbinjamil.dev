@@ -11,10 +11,9 @@ export default function ThemeToggler() {
 
   function toggleTheme() {
     if (window) {
-      const theme = window.localStorage.theme;
       const newTheme = theme === "dark" ? "light" : "dark";
       window.localStorage.theme = newTheme;
-      if (localStorage.theme === "dark") {
+      if (newTheme === "dark") {
         document.documentElement.classList.add("dark");
       } else {
         document.documentElement.classList.remove("dark");
