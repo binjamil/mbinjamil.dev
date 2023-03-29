@@ -1,0 +1,148 @@
+/* CSS Reset -> https://www.joshwcomeau.com/css/custom-css-reset/ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+html, body {
+  height: 100%;
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+input, button, textarea, select {
+  font: inherit;
+}
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+#root, #__next {
+  isolation: isolate;
+}
+button { all: unset; }
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('/fonts/Manrope.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Finesse Roman';
+  src: url('/fonts/Finesse-Roman.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Finesse Oblique';
+  src: url('/fonts/Finesse-Oblique.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('/fonts/FiraCode-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+
+/* Custom properties */
+:root {
+  /* colors */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --slate-950: #0C0C0C;
+
+  /* light */
+  --clr-text-base-light: var(--slate-900);
+  --clr-text-accent-light: var(--slate-700);
+  --clr-text-subtle-light: var(--slate-400);
+  --clr-link-border-light: var(--slate-600);
+  --clr-footer-border-light: var(--slate-200);
+  --clr-bg-light: var(--slate-50);
+  --clr-inline-code-bg-light: var(--slate-200);
+
+  /* dark */
+  --clr-text-base-dark: var(--slate-100);
+  --clr-text-accent-dark: var(--slate-300);
+  --clr-text-subtle-dark: var(--slate-700);
+  --clr-link-border-dark: var(--slate-400);
+  --clr-footer-border-dark: var(--slate-900);
+  --clr-bg-dark: var(--slate-950);
+  --clr-inline-code-bg-dark: var(--slate-700);
+
+  /* font families */
+  --ff-body: 'Manrope';
+  --ff-headlines: 'Finesse Roman';
+  --ff-code: 'Fira Code';
+  --ff-logo: 'Finesse Oblique';
+
+  /* font sizes */
+  --fs-50: 0.875rem;
+  --fs-100: 1rem;
+  --fs-200: 1.25rem;
+  --fs-300: 1.5rem;
+  --fs-400: 1.75rem;
+  --fs-500: 2rem;
+  --fs-600: 2.25rem;
+  --fs-700: 3.375rem;
+}
+
+html {
+  --clr-text-base: var(--clr-text-base-light);
+  --clr-text-accent: var(--clr-text-accent-light);
+  --clr-text-subtle: var(--clr-text-subtle-light);
+  --clr-link-border: var(--clr-link-border-light);
+  --clr-footer-border: var(--clr-footer-border-light);
+  --clr-bg: var(--clr-bg-light);
+  --clr-inline-code-bg: var(--clr-inline-code-bg-light);
+}
+
+html.dark {
+  --clr-text-base: var(--clr-text-base-dark);
+  --clr-text-accent: var(--clr-text-accent-dark);
+  --clr-text-subtle: var(--clr-text-subtle-dark);
+  --clr-link-border: var(--clr-link-border-dark);
+  --clr-footer-border: var(--clr-footer-border-dark);
+  --clr-bg: var(--clr-bg-dark);
+  --clr-inline-code-bg: var(--clr-inline-code-bg-dark);
+}
+
+/* base styles */
+html {
+  background-color: var(--clr-bg);
+  color: var(--clr-text-base);
+  font-family: var(--ff-body);
+}
+
+h1, h2, h3 {
+  font-family: var(--ff-headlines);
+}
+
+code {
+  font-family: var(--ff-code);
+  font-size: var(--fs-50);
+}
+
+/* Utility classes */
+.container {
+  --max-width: 60rem;
+  --padding: 1.5rem;
+  width: min(100% - var(--padding), var(--max-width));
+  margin-inline: auto;
+}
