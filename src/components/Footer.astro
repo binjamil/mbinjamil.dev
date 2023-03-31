@@ -3,11 +3,21 @@ const today = new Date();
 ---
 
 <footer>
-	&copy; {today.getFullYear()} YOUR NAME HERE. All rights reserved.
+  <div class="container">
+    <div>&copy;{today.getFullYear()} Muhammad Bin Jamil</div>
+    <div>All rights reserved</div>
+  </div>
 </footer>
 <style>
-	footer {
-		padding: 25px;
-		text-align: center;
-	}
+  footer {
+    font-size: var(--fs-text-footer);
+    color: var(--clr-text-subtle);
+    padding-block: 1rem;
+    border-top: 1px solid var(--clr-footer-border);
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
 </style>

@@ -4,52 +4,162 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import toSnakeCase from "../utils/snake-case";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, toc } = Astro.props;
 ---
 
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
-    <style>
-      .title {
-        font-size: 2em;
-        margin: 0.25em 0 0;
-      }
-      hr {
-        border-top: 1px solid #ddd;
-        margin: 1rem 0;
-      }
-      .last-updated-on {
-        font-style: italic;
-      }
-      :global(h1) {
-        color: red;
-        font-size: 4.5rem;
-      }
-    </style>
   </head>
 
   <body>
     <Header />
     <main>
       <article>
-        {heroImage && <img width={720} height={360} src={heroImage} alt="" />}
-        <h1 class="title">{title}</h1>
-        <FormattedDate date={pubDate} />
-        {
-          updatedDate && (
-            <div class="last-updated-on">
-              Last updated on <FormattedDate date={updatedDate} />
+        <div class="container">
+          <div class="post">
+            <div class="frontmatter">
+              <FormattedDate date={pubDate} />
+              <h1>{title}</h1>
             </div>
-          )
-        }
-        <hr />
-        <slot />
+            <slot />
+          </div>
+          <div class="toc">
+            <p>On this page</p>
+            <ul>
+              {
+                toc.map((heading) => (
+                  <div class="outer-li">
+                    <li>
+                      <a href={`#${toSnakeCase(heading.parent)}`}>
+                        {heading.parent}
+                      </a>
+                    </li>
+                    <ul class="nested-list">
+                      {heading.children?.map((subheading) => (
+                        <li>
+                          <a href={`#${toSnakeCase(subheading)}`}>
+                            {subheading}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
       </article>
+      <Footer />
     </main>
-    <Footer />
   </body>
 </html>
+
+<style>
+  article {
+    margin-block: 1.5rem;
+  }
+  .container {
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+  .post {
+    max-width: 578px;
+  }
+  .toc {
+    width: 300px;
+    position: sticky;
+    top: 0;
+    overflow-wrap: break-word;
+    height: fit-content;
+  }
+  .toc p:first-child {
+    font-weight: 700;
+  }
+  .outer-li {
+    margin-block: 0.5rem;
+  }
+  .outer-li > ul {
+    padding-inline-start: 1.5rem;
+  }
+  a {
+    border: none;
+  }
+  .frontmatter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  h1 {
+    font-size: var(--fs-h1);
+    line-height: 66px;
+  }
+  main :global(h2) {
+    font-size: var(--fs-h2);
+    margin-block: 1.5rem 0.5rem;
+  }
+  main :global(h3) {
+    font-size: var(--fs-h3);
+    margin-block: 1rem 0.5rem;
+  }
+  main :global(p) {
+    margin-block: 0.5rem;
+    font-size: var(--fs-text-body);
+  }
+  main :global(blockquote) {
+    margin-block: 1rem;
+    /* font-family: var(--ff-headlines); */
+    font-size: var(--fs-text-quote);
+    color: var(--clr-text-accent);
+    padding-inline-start: 1rem;
+    border-left: 3px solid var(--clr-text-base);
+  }
+  main :global(pre) {
+    margin-block: 1rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--clr-block-code-bg) !important;
+  }
+  main :global(pre code) {
+    padding: 0;
+    background-color: transparent;
+  }
+  main :global(code) {
+    font-family: var(--ff-code);
+    font-size: var(--fs-50);
+    padding: 2px 4px;
+    background-color: var(--clr-inline-code-bg);
+  }
+
+  @media screen and (max-width: 768px) {
+    article {
+      margin-block: 1rem;
+    }
+    h1 {
+      line-height: 43px;
+    }
+    .frontmatter {
+      margin-bottom: 1rem;
+    }
+    .container {
+      justify-content: center;
+    }
+    .post {
+      max-width: 100%;
+      width: 578px;
+    }
+    .toc {
+      display: none;
+    }
+    main :global(h2) {
+      margin-block: 1rem 0.5rem;
+    }
+  }
+</style>

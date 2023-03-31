@@ -5,13 +5,45 @@ import { SITE_TITLE } from "../consts";
 
 <header>
   <div class="container">
-    <h2>
-      {SITE_TITLE}
-    </h2>
+    <div class="logo-wrapper">
+      <button id="hamburger">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 12H20"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M4 6H20"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M4 18H20"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <h2>
+        {SITE_TITLE}
+      </h2>
+    </div>
     <nav>
-      <HeaderLink href="/">Home</HeaderLink>
-      <HeaderLink href="/about">About</HeaderLink>
-      <HeaderLink href="/blog">Posts</HeaderLink>
+      <div class="links">
+        <!-- <HeaderLink href="/">Home</HeaderLink>
+        <HeaderLink href="/about">About</HeaderLink>
+        <HeaderLink href="/blog">Posts</HeaderLink> -->
+        <HeaderLink href="#">Home</HeaderLink>
+        <HeaderLink href="#">About</HeaderLink>
+        <HeaderLink href="#">Posts</HeaderLink>
+      </div>
       <button id="themeToggle"
         ><svg
           width="22"
@@ -109,10 +141,16 @@ import { SITE_TITLE } from "../consts";
       padding-block: 1rem;
     }
 
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     h2 {
       font-weight: normal;
       font-family: var(--ff-logo);
-      font-size: var(--fs-500);
+      font-size: var(--fs-logo);
       line-height: 38px;
     }
 
@@ -122,6 +160,15 @@ import { SITE_TITLE } from "../consts";
       gap: 1.5rem;
     }
 
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    a {
+      border: none;
+    }
     .sun {
       stroke: var(--clr-text-base);
     }
@@ -133,6 +180,21 @@ import { SITE_TITLE } from "../consts";
     }
     :global(.dark) .moon {
       stroke: var(--clr-text-base);
+    }
+    #hamburger svg {
+      stroke: var(--clr-text-base);
+    }
+    #hamburger {
+      display: none;
+    }
+
+    @media screen and (max-width: 768px) {
+      .links {
+        display: none;
+      }
+      #hamburger {
+        display: block;
+      }
     }
   </style>
 
