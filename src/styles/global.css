@@ -191,7 +191,7 @@ a:hover {
 /* Utility classes */
 .container {
   --max-width: 60rem;
-  --padding: 1.5rem;
+  --padding: 3rem;
   width: min(100% - var(--padding), var(--max-width));
   margin-inline: auto;
 }
