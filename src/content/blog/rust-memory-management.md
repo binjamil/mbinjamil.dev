@@ -1,0 +1,61 @@
+---
+title: "How Rust solves memory management without a garbage collector"
+pubDate: "Apr 15, 2023"
+toc:
+  [
+    { parent: "The Stack and The Heap" },
+    {
+      parent: "Pick your poison",
+      children: ["Garbage collection", "Managing memory yourself"],
+    },
+    { parent: "Rust and RAII" },
+    { parent: "Further Reading" },
+  ]
+---
+
+Every computer program needs memory and a way to manage it. Traditional memory management paradigms are either error-prone or poorly performant. Rust's memory management system is unique because it provides memory safety and predictably high performance without the use of a garbage collector.
+
+## The Stack and The Heap
+
+First, we need peek underneath language constructs and understand what it means to manage computer memory. A computer's physical memory is called RAM and it's a place which stores code and data for a running program, called a _process_. Each process has an associated memory known as its virtual address space, which is divided into different segments:
+
+![A starry night sky.](../../assets/address-space-light.png)
+
+**Code**: holds CPU instructions. An Instruction Pointer (IP) points to the next instruction to be executed. Does not shrink or grow once the process starts running
+
+**Data**: holds global data such as variable and arrays. Does not shrink or grow once the process starts running
+
+**Heap**: the dynamic part of data segment that grows or shrinks as the process runs. A proccess allocates itself a chunk of memory from the OS using a system call. This chunk must be explicitly freed by letting the OS know you're done with it. Otherwise, it will remain allocated until the process crashes; this is known as a _memory leak_
+
+**Stack**: is used to implement function calls and stores local variables whose size is known at compile-time and. It allocates and deallocates in a last-in first out (LIFO) order, so the OS is able to automatically free memory when stack variables go out of scope
+
+<!--
+Stack memory access and allocation is faster than heap because it just involves changing the stack pointer's (SP) location instead of an OS system call. However, heap memory must be used if the program data size is unknown at compile-time, for example a string input by the user or a list of items that can grow. -->
+
+Stack memory allocation and deallocation is handled automatically by the underlying system architecure; however, heap memory must be managed by the program itself. Therefore, when we talk about memory management in programming, we're talking about managing heap memory.
+
+## Pick your poison
+
+Every programming language has some sort of mechanism to manage memory. Most programming languages use either manual memory management or garbage collection to manage computer memory. Choosing which form of memory management mechanism to use from these two is generally a trade-off between two characteristics of a running program: **memory safety** and **performance**.
+
+### Managing memory yourself
+
+Manual memory management, as in C/C++, is easy to get wrong, and the consequences of memory-related bugs can be devastating. That is why every major programming language outside of C, C++ and Rust use garbage collection.
+
+### Mark and sweep
+
+Chances are that the programming language you use every day is a garbage-collected language. Java, Python, JavaScript and Go among others are all garbage-collected languages. But what is garbage collection?
+
+Garbage collection (GC) is a runtime mechanism that automatically frees memory that is no longer being used by the program. It works by periodically running a separate program called the garbage collector in the background. Garbage collector pauses the execution of main program and runs an algorithm that finds and frees unused memory. _Mark and sweep_ is one example of such algorithm. At a high level, it iterates all the references and marks the memory they are utilizing, then it sweeps or frees the memory that was not marked. Garbage collection is a complex topic that requires several blog posts to explain, so we'll leave it here.
+
+The interesting thing to note, however, is that the garbage collection itself is an overhead. It pauses the execution of main thread in order to sweep garbage memory, which results in unpredictable performance degradations in applications. GC performance drawbacks are more visible in real-time, performance-critical apps that can no longer perform their real-time tasks when the garbage collector is scheduled to run. In fact, Discord [switched from Go to Rust](https://discord.com/blog/why-discord-is-switching-from-go-to-rust) for one of their performance-critical service exactly due to this reason.
+
+## Rust and RAII
+
+Enter Rust. In a world where you must pick either memory safety or high performance, Rust offers you both. Rust has an automatic memory management mechanism to discard memory-related bugs at compile-time and it has no garbage collector at runtime that stops the world to free memory.
+
+## Further Reading
+
+https://stanford-cs242.github.io/f18/lectures/05-1-rust-memory-safety.html
+
+https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html
