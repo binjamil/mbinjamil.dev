@@ -6,12 +6,14 @@ toc:
     { parent: "The Stack and The Heap" },
     {
       parent: "Pick your poison",
-      children: ["Garbage collection", "Managing memory yourself"],
+      children: ["Managing memory yourself", "Mark and Sweep"],
     },
     { parent: "Rust and RAII" },
+    { parent: "References" },
     { parent: "Further Reading" },
   ]
 ---
+import AccessibleImage from '../../components/AccessibleImage.astro';
 
 Every computer program needs memory and a way to manage it. Traditional memory management paradigms are either error-prone or poorly performant. Rust's memory management system is unique because it provides memory safety and predictably high performance without the use of a garbage collector.
 
@@ -19,7 +21,7 @@ Every computer program needs memory and a way to manage it. Traditional memory m
 
 First, we need peek underneath language constructs and understand what it means to manage computer memory. A computer's physical memory is called RAM and it's a place which stores code and data for a running program, called a _process_. Each process has an associated memory known as its virtual address space, which is divided into different segments:
 
-![A starry night sky.](../../assets/address-space-light.png)
+<AccessibleImage name="address-space" alt="Virtual address space" />
 
 **Code**: holds CPU instructions. An Instruction Pointer (IP) points to the next instruction to be executed. Does not shrink or grow once the process starts running
 
@@ -29,7 +31,6 @@ First, we need peek underneath language constructs and understand what it means 
 
 **Stack**: is used to implement function calls and stores local variables whose size is known at compile-time and. It allocates and deallocates in a last-in first out (LIFO) order, so the OS is able to automatically free memory when stack variables go out of scope
 
-<!--
 Stack memory access and allocation is faster than heap because it just involves changing the stack pointer's (SP) location instead of an OS system call. However, heap memory must be used if the program data size is unknown at compile-time, for example a string input by the user or a list of items that can grow. -->
 
 Stack memory allocation and deallocation is handled automatically by the underlying system architecure; however, heap memory must be managed by the program itself. Therefore, when we talk about memory management in programming, we're talking about managing heap memory.
@@ -40,7 +41,31 @@ Every programming language has some sort of mechanism to manage memory. Most pro
 
 ### Managing memory yourself
 
-Manual memory management, as in C/C++, is easy to get wrong, and the consequences of memory-related bugs can be devastating. That is why every major programming language outside of C, C++ and Rust use garbage collection.
+Old-school programming languages like C put the responsibility of managing dynamic memory, i.e. heap memory, on the programmer. A block of heap memory can be allocated and freed by making calls to low-level library functions `malloc` and `free`. It is the responsibility of programmer to make sure every heap-allocated memory block that is no longer needed is freed explicitly. Otherwise, the process will keep on eating up unnecessary memory; this is known as a _memory leak_.
+
+```cpp
+#include <cstdio>
+#include <cstdlib>
+
+void leak(int n) {
+    // Allocates memory that is never freed
+    int *a = (int*) malloc(n * sizeof(int));
+    return;
+}
+
+int main() {
+    // Program will keep around useless 400MiB of 
+    // memory allocated until it is terminated
+    for (int i = 0; i < 100000; ++i) {
+        leak(1000);
+    }
+
+    int input;
+    scanf("%d", &input);
+}
+```
+
+This is just one example of many different classes of memory-related bugs that arise in manual memory management. To see some of the most commonly-occuring memory errors along with their descriptions and code examples, check out [alzheimers](https://github.com/binjamil/alzheimers/). Manual memory management, as in C/C++, is easy to get wrong, and the [consequences of memory-related bugs can be devastating](https://blog.regehr.org/archives/1393). That is why every major programming language outside of C, C++ and Rust use garbage collection.
 
 ### Mark and sweep
 
@@ -52,7 +77,19 @@ The interesting thing to note, however, is that the garbage collection itself is
 
 ## Rust and RAII
 
-Enter Rust. In a world where you must pick either memory safety or high performance, Rust offers you both. Rust has an automatic memory management mechanism to discard memory-related bugs at compile-time and it has no garbage collector at runtime that stops the world to free memory.
+Enter Rust. In a world where you must pick either memory safety or high performance, Rust offers you both. Rust has an automatic memory management mechanism to discard memory-related bugs at compile-time, and it does that without a garbage collector at runtime.
+
+1. memory leaks
+1. use-after-free
+1. double-free
+
+## References
+
+https://github.com/binjamil/alzheimers/
+
+https://blog.regehr.org/archives/1393
+
+https://discord.com/blog/why-discord-is-switching-from-go-to-rust
 
 ## Further Reading
 

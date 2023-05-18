@@ -1,0 +1,36 @@
+---
+import { Image, Picture } from '@astrojs/image/components';
+
+type Props = { name: string, alt: string };
+
+const { name, alt } = Astro.props;
+---
+
+<Image class="lightImage" src={import(`../assets/${name}-light.png`)} alt={alt} />
+<Image class="darkImage" src={import(`../assets/${name}-dark.png`)} alt={alt} />
+
+<script>
+function handleImageToggle() {
+	const isDark = document.querySelector("html").classList.contains("dark");
+	if (isDark) {
+		for (let el of document.querySelectorAll(".lightImage")) {
+			el.style.display = "none";
+		}
+		for (let el of document.querySelectorAll(".darkImage")) {
+			el.style.display = "block";
+		}
+	} else {
+		for (let el of document.querySelectorAll(".darkImage")) {
+			el.style.display = "none";
+		}
+		for (let el of document.querySelectorAll(".lightImage")) {
+			el.style.display = "block";
+		}
+	}
+}
+
+handleImageToggle();
+
+const themeToggle = document.getElementById("themeToggle");
+if (themeToggle) themeToggle.addEventListener("click", handleImageToggle);
+</script>
