@@ -29,11 +29,9 @@ First, we need peek underneath language constructs and understand what it means 
 
 **Heap**: the dynamic part of data segment that grows or shrinks as the process runs. A proccess allocates itself a chunk of memory from the OS using a system call. This chunk must be explicitly freed by letting the OS know you're done with it. Otherwise, it will remain allocated until the process crashes; this is known as a _memory leak_
 
-**Stack**: is used to implement function calls and stores local variables whose size is known at compile-time and. It allocates and deallocates in a last-in first out (LIFO) order, so the OS is able to automatically free memory when stack variables go out of scope
+**Stack**: is used to implement function calls and stores local variables whose size is known at compile-time. It allocates and deallocates in a last-in first out (LIFO) order, so the OS is able to automatically free memory when stack variables go out of scope
 
-Stack memory access and allocation is faster than heap because it just involves changing the stack pointer's (SP) location instead of an OS system call. However, heap memory must be used if the program data size is unknown at compile-time, for example a string input by the user or a list of items that can grow. -->
-
-Stack memory allocation and deallocation is handled automatically by the underlying system architecure; however, heap memory must be managed by the program itself. Therefore, when we talk about memory management in programming, we're talking about managing heap memory.
+So, stack memory allocation and deallocation is handled automatically by the underlying system architecure. However, heap memory must be managed by the program itself. Therefore, when we talk about memory management in programming, we're talking about managing heap memory.
 
 ## Pick your poison
 
