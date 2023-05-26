@@ -1,5 +1,6 @@
 ---
 title: "Using interfaces in Go the right way"
+description: "Go interfaces offer great flexibility and powerful abstraction. However, their misuse can lead to cluttered and unmaintable code. Read this guide to learn how to use Go interfaces that follow SOLID design principles"
 pubDate: "Feb 10, 2022"
 toc:
   [
