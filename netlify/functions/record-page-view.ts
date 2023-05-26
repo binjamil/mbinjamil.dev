@@ -15,12 +15,7 @@ export const handler: Handler = withPlanetscale(async (event, context) => {
     }
   }
 
-  // const geoData = JSON.parse(event.headers['x-nf-geo'] || "{}");
-  // const clientIp = event.headers['client-ip'];
   const { geo, ip, slug } = JSON.parse(event.body || "{}");
-
-  // console.log({ geoData, clientIp, slug });
-  console.log({ geo, ip, slug });
 
   try {
     await connection.execute(

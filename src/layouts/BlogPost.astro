@@ -63,7 +63,7 @@ const { title, description, pubDate, toc, slug } = Astro.props;
       const resGeo = await fetch("/edge/geo");
       const geoData = await resGeo.json();
 
-      const resPageView = await fetch("/.netlify/functions/record-page-view", {
+      await fetch("/.netlify/functions/record-page-view", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,8 +73,6 @@ const { title, description, pubDate, toc, slug } = Astro.props;
           ...geoData,
         }),
       });
-      const pageViewData = await resPageView.json();
-      console.log({ pageViewData });
     }
 
     recordPageView();
