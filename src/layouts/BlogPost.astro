@@ -60,6 +60,9 @@ const { title, description, pubDate, toc, slug } = Astro.props;
   </body>
   <script define:vars={{ slug }}>
     async function recordPageView() {
+      const resGeo = await fetch("/edge/geo");
+      const geoData = await resGeo.json();
+
       const resPageView = await fetch("/.netlify/functions/record-page-view", {
         method: "POST",
         headers: {
@@ -67,6 +70,7 @@ const { title, description, pubDate, toc, slug } = Astro.props;
         },
         body: JSON.stringify({
           slug,
+          ...geoData,
         }),
       });
       const pageViewData = await resPageView.json();

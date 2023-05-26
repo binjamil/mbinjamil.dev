@@ -15,27 +15,28 @@ export const handler: Handler = withPlanetscale(async (event, context) => {
     }
   }
 
-  const geoData = JSON.parse(event.headers['x-nf-geo'] || "{}");
-  const clientIp = event.headers['client-ip'];
-  const { slug } = JSON.parse(event.body || "{}");
+  // const geoData = JSON.parse(event.headers['x-nf-geo'] || "{}");
+  // const clientIp = event.headers['client-ip'];
+  const { geo, ip, slug } = JSON.parse(event.body || "{}");
 
-  console.log({ geoData, clientIp, slug });
+  // console.log({ geoData, clientIp, slug });
+  console.log({ geo, ip, slug });
 
   try {
     await connection.execute(
       "INSERT INTO page_views (slug, city, subdivision, country, timezone, client_ip) VALUES (?, ?, ?, ?, ?, ?)",
       [
         slug,
-        geoData.city,
-        geoData.subdivision.name,
-        geoData.country.name,
-        geoData.timezone,
-        clientIp,
+        geo.city,
+        geo.subdivision.name,
+        geo.country.name,
+        geo.timezone,
+        ip,
       ]
     );
   }
   catch (err) {
-    console.log("Error:", err);
+    console.error("Error:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({
