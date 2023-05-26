@@ -33,6 +33,7 @@ export const handler: Handler = withPlanetscale(async (event, context) => {
     );
   }
   catch (err) {
+    console.log("Error:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({
