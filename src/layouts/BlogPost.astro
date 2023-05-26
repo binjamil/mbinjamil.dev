@@ -6,9 +6,9 @@ import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import toSnakeCase from "../utils/snake-case";
 
-type Props = CollectionEntry<"writings">["data"];
+type Props = CollectionEntry<"writings">["data"] & {slug: string};
 
-const { title, description, pubDate, toc } = Astro.props;
+const { title, description, pubDate, toc, slug } = Astro.props;
 ---
 
 <html lang="en">
@@ -58,108 +58,127 @@ const { title, description, pubDate, toc } = Astro.props;
       <Footer />
     </main>
   </body>
-</html>
+  <script define:vars={{ slug }}>
+    async function recordPageView() {
+      const resGeo = await fetch("/edge/geo");
+      const geoData = await resGeo.json();
 
-<style>
-  article {
-    margin-block: 1.5rem;
-  }
-  .container {
-    display: flex;
-    justify-content: space-between;
-    gap: 3rem;
-  }
-  .post {
-    max-width: 578px;
-  }
-  .toc {
-    width: 300px;
-    position: sticky;
-    top: 0;
-    overflow-wrap: break-word;
-    height: fit-content;
-  }
-  .toc p:first-child {
-    font-weight: 700;
-  }
-  .outer-li {
-    margin-block: 0.5rem;
-  }
-  .outer-li > ul {
-    padding-inline-start: 1.5rem;
-  }
-  a {
-    border: none;
-  }
-  .frontmatter {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-  h1 {
-    font-size: var(--fs-h1);
-    line-height: 66px;
-  }
-  main :global(h2) {
-    font-size: var(--fs-h2);
-    margin-block: 1.5rem 0.5rem;
-  }
-  main :global(h3) {
-    font-size: var(--fs-h3);
-    margin-block: 1rem 0.5rem;
-  }
-  main :global(p) {
-    margin-block: 0.5rem;
-    font-size: var(--fs-text-body);
-  }
-  main :global(blockquote) {
-    margin-block: 1rem;
-    /* font-family: var(--ff-headlines); */
-    font-size: var(--fs-text-quote);
-    color: var(--clr-text-accent);
-    padding-inline-start: 1rem;
-    border-left: 3px solid var(--clr-text-base);
-  }
-  main :global(pre) {
-    margin-block: 1rem;
-    padding: 1rem 1.5rem;
-    border-radius: 0.5rem;
-    background-color: var(--clr-block-code-bg) !important;
-  }
-  main :global(pre code) {
-    padding: 0;
-    background-color: transparent;
-  }
-  main :global(code) {
-    font-family: var(--ff-code);
-    font-size: var(--fs-50);
-    padding: 2px 4px;
-    background-color: var(--clr-inline-code-bg);
-  }
+      await fetch("/.netlify/functions/record-page-view", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          slug,
+          ...geoData,
+        }),
+      });
+    }
 
-  @media screen and (max-width: 768px) {
+    recordPageView();
+  </script>
+
+  <style>
     article {
-      margin-block: 1rem;
-    }
-    h1 {
-      line-height: 43px;
-    }
-    .frontmatter {
-      margin-bottom: 1rem;
+      margin-block: 1.5rem;
     }
     .container {
-      justify-content: center;
+      display: flex;
+      justify-content: space-between;
+      gap: 3rem;
     }
     .post {
-      max-width: 100%;
-      width: 578px;
+      max-width: 578px;
     }
     .toc {
-      display: none;
+      width: 300px;
+      position: sticky;
+      top: 0;
+      overflow-wrap: break-word;
+      height: fit-content;
+    }
+    .toc p:first-child {
+      font-weight: 700;
+    }
+    .outer-li {
+      margin-block: 0.5rem;
+    }
+    .outer-li > ul {
+      padding-inline-start: 1.5rem;
+    }
+    a {
+      border: none;
+    }
+    .frontmatter {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: var(--fs-h1);
+      line-height: 66px;
     }
     main :global(h2) {
+      font-size: var(--fs-h2);
+      margin-block: 1.5rem 0.5rem;
+    }
+    main :global(h3) {
+      font-size: var(--fs-h3);
       margin-block: 1rem 0.5rem;
     }
-  }
-</style>
+    main :global(p) {
+      margin-block: 0.5rem;
+      font-size: var(--fs-text-body);
+    }
+    main :global(blockquote) {
+      margin-block: 1rem;
+      /* font-family: var(--ff-headlines); */
+      font-size: var(--fs-text-quote);
+      color: var(--clr-text-accent);
+      padding-inline-start: 1rem;
+      border-left: 3px solid var(--clr-text-base);
+    }
+    main :global(pre) {
+      margin-block: 1rem;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      background-color: var(--clr-block-code-bg) !important;
+    }
+    main :global(pre code) {
+      padding: 0;
+      background-color: transparent;
+    }
+    main :global(code) {
+      font-family: var(--ff-code);
+      font-size: var(--fs-50);
+      padding: 2px 4px;
+      background-color: var(--clr-inline-code-bg);
+    }
+
+    @media screen and (max-width: 768px) {
+      article {
+        margin-block: 1rem;
+      }
+      h1 {
+        line-height: 43px;
+      }
+      .frontmatter {
+        margin-bottom: 1rem;
+      }
+      .container {
+        justify-content: center;
+      }
+      .post {
+        max-width: 100%;
+        width: 578px;
+      }
+      .toc {
+        display: none;
+      }
+      main :global(h2) {
+        margin-block: 1rem 0.5rem;
+      }
+    }
+  </style>
+</html>
