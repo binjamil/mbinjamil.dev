@@ -19,6 +19,8 @@ export const handler: Handler = withPlanetscale(async (event, context) => {
   const clientIp = event.headers['client-ip'];
   const { slug } = JSON.parse(event.body || "{}");
 
+  console.log({ geoData, clientIp, slug });
+
   try {
     await connection.execute(
       "INSERT INTO page_views (slug, city, subdivision, country, timezone, client_ip) VALUES (?, ?, ?, ?, ?, ?)",
