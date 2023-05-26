@@ -16,12 +16,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
       <h1 id="hello"></h1>
     </main>
     <Footer />
-    <script>
-      fetch('./.netlify/functions/hello-world').then(res => res.json().then(json => {
-        const { message } = json;
-        document.querySelector('#hello').innerText = message;
-      }));
-    </script>
   </body>
 </html>
 
+<script>
+  fetch('./.netlify/functions/hello-world').then(res => res.json().then(json => {
+    const { message } = json;
+    document.querySelector('#hello').innerText = message;
+  }));
+</script>
