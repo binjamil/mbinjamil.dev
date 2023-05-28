@@ -31,9 +31,11 @@ import { SITE_TITLE } from "../consts";
             stroke-linejoin="round"></path>
         </svg>
       </button>
-      <h2>
-        {SITE_TITLE}
-      </h2>
+      <a href="/">
+        <h2>
+          {SITE_TITLE}
+        </h2>
+      </a>
     </div>
     <nav>
       <div class="links">
@@ -182,6 +184,9 @@ import { SITE_TITLE } from "../consts";
     }
     #hamburger {
       display: none;
+    }
+    #themeToggle {
+      cursor: pointer;
     }
 
     @media screen and (max-width: 768px) {
