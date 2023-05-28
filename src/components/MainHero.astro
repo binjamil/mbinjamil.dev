@@ -1,10 +1,10 @@
 <section class="hero">
   <h1 class="hero-title">Hey, I'm Muhammad</h1>
   <p class="hero-description">
-    I'm a Software Engineer at <a href="https://auxcube.com/">Auxcube</a>. I design and build scalable
-    software solutions to real-world business problems. And I'm very keen to
-    share my continuous learning and development journey here on my personal
-    blog.
+    I'm a Software Engineer at <a href="https://auxcube.com/">Auxcube</a>. I
+    design and build scalable software solutions to real-world business
+    problems. And I'm very keen to share my continuous learning and development
+    journey here on my personal blog.
   </p>
   <div class="social-icons">
     <a href="https://github.com/binjamil" class="social-link">
@@ -39,7 +39,10 @@
       </svg>
     </a>
 
-    <a href="https://www.linkedin.com/in/muhammad-bin-jamil-0499141a3/" class="social-link">
+    <a
+      href="https://www.linkedin.com/in/muhammad-bin-jamil-0499141a3/"
+      class="social-link"
+    >
       <svg
         width="40px"
         height="40px"
@@ -120,5 +123,19 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .hero {
+      padding-block: 6rem;
+    }
+
+    .hero-title {
+      font-size: var(--fs-600);
+    }
+
+    .hero-description {
+      font-size: var(--fs-100);
+    }
   }
 </style>
