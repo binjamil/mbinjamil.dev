@@ -1,0 +1,87 @@
+---
+import { getCollection } from "astro:content";
+
+type Props = {
+  sort?: {
+    field: "date" | "views";
+    order: "desc" | "asc";
+  };
+  limit?: number;
+  detailed?: boolean;
+};
+
+const { sort, limit, detailed } = Astro.props;
+
+let writings = await getCollection("writings");
+writings.sort((e1, e2) => {
+  if (e1.data.pubDate > e2.data.pubDate) {
+    return -1;
+  } else if (e1.data.pubDate < e2.data.pubDate) {
+    return 1;
+  } else {
+    return 0;
+  }
+});
+if (limit) {
+  writings.length = limit;
+}
+---
+
+<section class="container">
+  <div class="posts">
+    {
+      writings.map((p) => (
+        <div>
+          <p class="post-title">
+            <a href={"/writings/" + p.slug}>{p.data.title}</a>
+          </p>
+          <p class="post-date">
+            <time datetime={p.data.pubDate.toISOString()}>
+              {p.data.pubDate.toLocaleDateString("en-us", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </time>
+          </p>
+          {detailed && <p class="post-description">{p.data.description}</p>}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  section {
+    margin-bottom: 3rem;
+  }
+  .posts {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
+  .post-title {
+    font-size: var(--fs-200);
+  }
+  .post-date, .post-description {
+    color: var(--clr-text-accent);
+    font-size: var(--fs-100);
+  }
+  .post-description {
+    max-width: 578px;
+    font-style: italic;
+    font-size: var(--fs-50);
+  }
+
+  @media screen and (max-width: 768px) {
+    section {
+      margin-bottom: 2rem;
+    }
+    .post-title {
+      font-size: var(--fs-100);
+    }
+    .post-date, .post-description {
+      font-size: var(--fs-50);
+    }
+  }
+</style>

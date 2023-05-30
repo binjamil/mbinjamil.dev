@@ -4,18 +4,28 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import MainHero from "../components/MainHero.astro";
+import Posts from "../components/Posts.astro";
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead title={"Muhammad Bin Jamil | " + SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
     <Header />
-    <main class="container">
+    <main>
       <MainHero />
+      <div class="container">
+        <h2>Recent Posts</h2>
+      </div>
+      <Posts limit={5} />
     </main>
     <Footer />
+    <style>
+      h2 {
+        font-size: var(--fs-h2);
+      }
+    </style>
   </body>
 </html>
