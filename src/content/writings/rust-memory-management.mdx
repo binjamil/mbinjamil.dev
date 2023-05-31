@@ -28,11 +28,11 @@ First, we need peek underneath language constructs and understand what it means 
 
 **Data**: holds global data such as variable and arrays. Does not shrink or grow once the process starts running
 
-**Heap**: the dynamic part of data segment that grows or shrinks as the process runs. A proccess allocates itself a chunk of memory from the OS using a system call. This chunk must be explicitly freed by letting the OS know you're done with it. Otherwise, it will remain allocated until the process crashes; this is known as a _memory leak_
+**Heap**: the dynamic part of data segment that grows or shrinks as the process runs. A proccess allocates itself a chunk of memory from the OS using a low-level library call such as `malloc`. This chunk must be explicitly freed by letting the OS know you're done with it. Otherwise, it will remain allocated until the process crashes; this is known as a _memory leak_
 
-**Stack**: is used to implement function calls and stores local variables whose size is known at compile-time. It allocates and deallocates in a last-in first out (LIFO) order, so the OS is able to automatically free memory when stack variables go out of scope
+**Stack**: stores local variables and function arguments. Similar to heap, the stack expands and contracts dynamically. However, the stack memory is managed automatically because of its last-in first out (LIFO) structure. When a function is called, a new stack frame is pushed onto the stack (automatic allocation). And when the function returns, the stack frame is destroyed (automatic deallocation)
 
-So, stack memory allocation and deallocation is handled automatically by the underlying system architecure. However, heap memory must be managed by the program itself. Therefore, when we talk about memory management in programming, we're talking about managing heap memory.
+So, stack memory allocation and deallocation is fast and handled automatically by the underlying system architecure. However, heap memory must be used when the lifetime of an object extends beyond one local function. Therefore, when we talk about memory management in programming, we're talking about managing heap memory.
 
 ## Pick your poison
 
@@ -76,11 +76,49 @@ The interesting thing to note, however, is that the garbage collection itself is
 
 ## Rust and RAII
 
-Enter Rust. In a world where you must pick either memory safety or high performance, Rust offers you both. Rust has an automatic memory management mechanism to discard memory-related bugs at compile-time, and it does that without a garbage collector at runtime.
+Enter Rust. In a world where you must pick either memory safety or high performance, Rust offers you both. Rust has an automatic memory management mechanism to discard memory-related bugs at compile-time, so there's no need for a garbage collector.
 
-1. memory leaks
-1. use-after-free
-1. double-free
+1. ownership, makes heap memory feel like stack memory if its rules are followed
+1. 1. every heap-allocated object has only one owner
+1. 1. when owner goes out of scope, memory is dropped (leaks are highly unlikely in Rust)
+1. 1. code snippet from brown using Box::new
+1. borrowing, to not move ownership
+1. 1. creates references to the value owned by someone else
+1. 1. references are valid as long as owner is not dropped
+
+Binding the allocation lifetime of a resource, such as memory, to the lifetime of an object in this way is known as _Resource Acquisition Is Initialization (RAII)_.
+
+```rust
+fn make_and_drop() {
+    // Allocates heap-memory whose owner is variable '_a'
+    let _a = Box::new([0; 1000]);
+    // Memory is deallocated after function ends because
+    // the owner variable's lifetime ends
+}
+
+fn main() {
+    // No memory leak
+    for _ in 0..100000 {
+        make_and_drop();
+    }
+
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).unwrap();    
+}
+```
+Here's the summary from `valgrind`:
+
+```
+➜ valgrind target/debug/noleak
+==28617== HEAP SUMMARY:
+==28617==     in use at exit: 0 bytes in 0 blocks
+==28617==   total heap usage: 100,010 allocs, 100,010 frees, 400,002,157 bytes allocated
+==28617== 
+==28617== All heap blocks were freed -- no leaks are possible
+==28617== 
+==28617== For lists of detected and suppressed errors, rerun with: -s
+==28617== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
 
 ## References
 
