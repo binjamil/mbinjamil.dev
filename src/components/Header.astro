@@ -4,7 +4,33 @@ import { SITE_TITLE } from "../consts";
 ---
 
 <header>
-  <div class="container">
+  <div class="overlay">
+    <div class="overlay-content">
+      <HeaderLink href="/">Home</HeaderLink>
+      <HeaderLink href="/writings">Writings</HeaderLink>
+    </div>
+    <button id="close-menu">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M18 6L6 18"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+        <path
+          d="M6 6L18 18"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="container menu">
     <div class="logo-wrapper">
       <button id="hamburger">
         <svg
@@ -132,7 +158,7 @@ import { SITE_TITLE } from "../consts";
       border-bottom: 1px solid var(--clr-footer-border);
     }
 
-    .container {
+    .menu {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -179,25 +205,68 @@ import { SITE_TITLE } from "../consts";
     :global(.dark) .moon {
       stroke: var(--clr-text-base);
     }
-    #hamburger svg {
+    #hamburger svg,
+    #close-menu svg {
+      cursor: pointer;
       stroke: var(--clr-text-base);
     }
-    #hamburger {
+    #hamburger,
+    #close-menu {
       display: none;
     }
     #themeToggle {
       cursor: pointer;
     }
 
+    .overlay {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: var(--clr-bg);
+      overflow: hidden;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .overlay-content {
+      display: flex;
+      flex-direction: column;
+      font-size: var(--fs-400);
+      justify-content: center;
+      align-items: center;
+    }
+    #close-menu {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+    }
+
     @media screen and (max-width: 768px) {
       .links {
         display: none;
       }
-      #hamburger {
+      #hamburger,
+      #close-menu {
         display: block;
       }
     }
   </style>
+
+  <script>
+    const hamburger = document.querySelector("#hamburger") as HTMLElement;
+    const closeMenu = document.querySelector("#close-menu") as HTMLElement;
+    const overlay = document.querySelector(".overlay") as HTMLElement;
+    hamburger.addEventListener("click", () => {
+        overlay.style.display = "flex";
+    });
+    closeMenu.addEventListener("click", () => {
+        overlay.style.display = "none";
+    });
+
+  </script>
 
   <script>
     const theme = (() => {
