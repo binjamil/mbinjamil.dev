@@ -32,7 +32,7 @@ if (limit) {
     {
       writings.map((p) => (
         <div>
-          <p class="post-title">
+          <p class="post-title" class:list={["post-title", {"font-bold": detailed}]}>
             <a href={"/writings/" + p.slug}>{p.data.title}</a>
           </p>
           <p class="post-date">
@@ -69,7 +69,6 @@ if (limit) {
   }
   .post-description {
     max-width: 578px;
-    font-style: italic;
     font-size: var(--fs-50);
   }
 

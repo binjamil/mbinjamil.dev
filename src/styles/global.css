@@ -196,3 +196,7 @@ a:hover {
   width: min(100% - var(--padding), var(--max-width));
   margin-inline: auto;
 }
+
+.font-bold {
+  font-weight: bold;
+}
