@@ -24,6 +24,7 @@ const { title, description, pubDate, toc, slug } = Astro.props;
         <div class="container">
           <div class="post">
             <div class="frontmatter">
+              <p class="back-link"><a href="/writings">Back to all writings</a></p>
               <FormattedDate date={pubDate} />
               <h1>{title}</h1>
             </div>
@@ -107,8 +108,11 @@ const { title, description, pubDate, toc, slug } = Astro.props;
     .outer-li > ul {
       padding-inline-start: 1.5rem;
     }
-    a {
+    .toc a {
       border: none;
+    }
+    .back-link {
+      font-size: var(--fs-100);
     }
     .frontmatter {
       display: flex;
@@ -176,6 +180,9 @@ const { title, description, pubDate, toc, slug } = Astro.props;
       }
       .toc {
         display: none;
+      }
+      .back-link {
+        font-size: var(--fs-50);
       }
       main :global(h2) {
         margin-block: 1rem 0.5rem;

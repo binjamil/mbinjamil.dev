@@ -10,21 +10,38 @@ import Posts from "../components/Posts.astro";
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <BaseHead title={"Muhammad Bin Jamil | " + SITE_TITLE} description={SITE_DESCRIPTION} />
+    <BaseHead
+      title={"Muhammad Bin Jamil | " + SITE_TITLE}
+      description={SITE_DESCRIPTION}
+    />
   </head>
   <body>
     <Header />
     <main>
       <MainHero />
       <div class="container">
-        <h2>Recent Posts</h2>
+        <h2>Recent Writings</h2>
       </div>
       <Posts limit={5} />
+      <div class="container">
+        <p><a href="/writings">View all writings</a></p>
+      </div>
     </main>
     <Footer />
     <style>
+      main {
+        margin-bottom: 2rem;
+      }
       h2 {
         font-size: var(--fs-h2);
+      }
+      p a {
+        font-size: var(--fs-100);
+      }
+  @media screen and (max-width: 768px) {
+      p a {
+        font-size: var(--fs-50);
+      }
       }
     </style>
   </body>
