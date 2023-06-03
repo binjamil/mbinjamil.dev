@@ -20,7 +20,7 @@ Every computer program needs memory and a way to manage it. Traditional memory m
 
 ## The Stack and The Heap
 
-First, we need peek underneath language constructs and understand what it means to manage computer memory. A computer's physical memory is called RAM and it's a place which stores code and data for a running program, called a _process_. Each process has an associated memory known as its virtual address space, which is divided into different segments:
+First, we need peek underneath the programming language constructs and understand what it means to manage computer memory. A computer's physical memory is called RAM and it's a place which stores code and data for a running program, called a _process_. Each process has an associated memory known as its virtual address space, which is divided into different segments:
 
 <AccessibleImage name="address-space" alt="Virtual address space" />
 
@@ -40,7 +40,9 @@ Every programming language has some sort of mechanism to manage memory. Most pro
 
 ### Managing memory yourself
 
-Old-school programming languages like C put the responsibility of managing dynamic memory, i.e. heap memory, on the programmer. A block of heap memory can be allocated and freed by making calls to low-level library functions `malloc` and `free`. It is the responsibility of programmer to make sure every heap-allocated memory block that is no longer needed is freed explicitly. Otherwise, the process will keep on eating up unnecessary memory; this is known as a _memory leak_.
+Old-school programming languages like C put the responsibility of managing dynamic memory, i.e. heap memory, on the programmer. A block of heap memory can be allocated and freed by making calls to low-level library functions `malloc` and `free`. It is the responsibility of programmer to make sure every heap-allocated memory block that is no longer needed is freed explicitly. Otherwise, the process will keep on eating up unnecessary memory; this is known as a memory leak.
+
+Here's how to leak around 400MiB of memory in C++:
 
 ```cpp
 #include <cstdio>
@@ -78,15 +80,19 @@ The interesting thing to note, however, is that the garbage collection itself is
 
 Enter Rust. In a world where you must pick either memory safety or high performance, Rust offers you both. Rust has an automatic memory management mechanism to discard memory-related bugs at compile-time, so there's no need for a garbage collector.
 
-1. ownership, makes heap memory feel like stack memory if its rules are followed
-1. 1. every heap-allocated object has only one owner
-1. 1. when owner goes out of scope, memory is dropped (leaks are highly unlikely in Rust)
-1. 1. code snippet from brown using Box::new
-1. borrowing, to not move ownership
-1. 1. creates references to the value owned by someone else
-1. 1. references are valid as long as owner is not dropped
+_Ownership_ is a novel concept introduced in Rust that makes heap memory usage feel like it's stack memory, i.e. automatic memory allocation and deallocation. Ownership is a set of rules that the Rust compiler enforces in order to make automatic memory management possible. The most important ownership rule is that every valid heap-allocated value in Rust has exactly one _owner_ variable. 
 
-Binding the allocation lifetime of a resource, such as memory, to the lifetime of an object in this way is known as _Resource Acquisition Is Initialization (RAII)_.
+In Rust, we can use `Box` construct to allocate data on the heap. In the following snippet, `Box::new` creates an array of integers on the heap and stores the pointer to it in the variable `a`. We say that `a` is the owner of the heap-allocated array of integers. In the second line, the ownership is moved from `a` to `b`. Note that the heap data is not copied. Since there can be only one owner at a time, the same array of integers on the heap that was owned by `a` is now owned by variable `b`. Variable `a` can no longer be used after the ownership _move_ as it is deemed invalid by Rust. Uncommenting the third line will produce a compile-time error:
+
+```rust
+let a = Box::new([0; 1000]);
+let b = a;
+// println!("{}", a[0]);
+```
+
+Since there is only one owner to any heap-allocated data, Rust can make the assumption that if the owner is no longer valid, the heap-allocated value can be dropped. Therefore, whenever the owner variable goes out of scope, the underlying heap memory is deallocated automatically. Binding the allocation lifetime of a resource, such as memory, to the lifetime of an object in this way is known as _Resource Acquisition Is Initialization (RAII)_. RAII means that memory leaks are highly unlikely since memory is dropped automatically when the owner goes out of scope.
+
+Following is a Rust program that has the same source code as the C++ example program we looked earlier. However, the behavior is different. Rust compiler won't allow programmers to leak memory easily:
 
 ```rust
 fn make_and_drop() {
@@ -106,7 +112,7 @@ fn main() {
     std::io::stdin().read_line(&mut input).unwrap();    
 }
 ```
-Here's the summary from `valgrind`:
+Here's the summary from `valgrind` confirming that all heap blocks were freed. Hence, no memory leak:
 
 ```
 ➜ valgrind target/debug/noleak

@@ -24,7 +24,7 @@ const { title, description, pubDate, toc, slug } = Astro.props;
         <div class="container">
           <div class="post">
             <div class="frontmatter">
-              <p class="back-link"><a href="/writings">Back to all writings</a></p>
+              <p class="back-link"><a href="/writings">&#8592; Back to all writings</a></p>
               <FormattedDate date={pubDate} />
               <h1>{title}</h1>
             </div>
@@ -101,6 +101,10 @@ const { title, description, pubDate, toc, slug } = Astro.props;
     }
     .toc p:first-child {
       font-weight: 700;
+    }
+    .toc ul {
+      list-style-type: none;
+      padding: 0;
     }
     .outer-li {
       margin-block: 0.5rem;
