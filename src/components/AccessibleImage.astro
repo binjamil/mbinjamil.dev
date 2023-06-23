@@ -1,13 +1,13 @@
 ---
 import { Image, Picture } from '@astrojs/image/components';
 
-type Props = { name: string, alt: string };
+type Props = { name: string, alt: string, width?: number };
 
-const { name, alt } = Astro.props;
+const { name, alt, width } = Astro.props;
 ---
 
-<Image class="lightImage" src={import(`../assets/${name}-light.png`)} alt={alt} />
-<Image class="darkImage" src={import(`../assets/${name}-dark.png`)} alt={alt} />
+<Image class="lightImage" src={import(`../assets/${name}-light.png`)} alt={alt} width={width} />
+<Image class="darkImage" src={import(`../assets/${name}-dark.png`)} alt={alt} width={width}/>
 
 <script>
 function handleImageToggle() {
