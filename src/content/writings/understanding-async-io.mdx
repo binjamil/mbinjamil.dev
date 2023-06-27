@@ -139,7 +139,7 @@ void startServer(Server *server) {
 }
 ```
 
-Finally, we have our event loop. We first call `epoll_wait` which blocks our server socket is ready for read operation. It returns the number of ready events and stores those events in `events` array. So, we check each one in the for loop and check if its a read event on the server's socket (which it will be on every case as we only have our server's socket in the epoll interest list). We then read the message from client, create an instance of `Request` and pass it to the callback function we stored earlier for message event.
+Finally, we have our event loop. We first call `epoll_wait` which blocks until our server socket is ready for read operations. It returns the number of ready events and stores those events in `events` array. So, we check each one in the for loop and check if its a read event on the server's socket (which it will be on every case as we only have our server's socket in the epoll interest list). We then read the message from client, create an instance of `Request` and pass it to the callback function we stored earlier for message event.
 
 ```c
 void startServer(Server *server) {    
@@ -166,7 +166,7 @@ void startServer(Server *server) {
 
 ### Demo
 
-Let's take our fresh event loop for a spin. We create a new server on port `41234`, register our handler function that echoes back the message and start the server. See how similar the code looks to the Node.js example above.
+Let's take our fresh event loop for a spin. We create a new server on port `41234`, register our handler function that echoes back the message and start the server. See how similar the following C code looks to the Node.js example above.
 
 ```c
 void handleMessage(Request *req) {
