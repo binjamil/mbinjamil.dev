@@ -13,6 +13,7 @@ type Props = {
 const { sort, limit, detailed } = Astro.props;
 
 let writings = await getCollection("writings");
+writings = writings.filter((p) => !!p); // hack to mitigate undefined posts returned by getCollection in astro build. open an issue if not fixed after some time
 writings.sort((e1, e2) => {
   if (e1.data.pubDate > e2.data.pubDate) {
     return -1;
@@ -32,7 +33,10 @@ if (limit) {
     {
       writings.map((p) => (
         <div>
-          <p class="post-title" class:list={["post-title", {"font-bold": detailed}]}>
+          <p
+            class="post-title"
+            class:list={["post-title", { "font-bold": detailed }]}
+          >
             <a href={"/writings/" + p.slug}>{p.data.title}</a>
           </p>
           <p class="post-date">
@@ -58,15 +62,16 @@ if (limit) {
   .posts {
     display: flex;
     flex-direction: column;
-    gap: .75rem;
+    gap: 0.75rem;
   }
   .post-title {
     font-size: var(--fs-200);
   }
-  .post-date, .post-description {
+  .post-date,
+  .post-description {
     color: var(--clr-text-accent);
     font-size: var(--fs-100);
-    padding-top: .25rem;
+    padding-top: 0.25rem;
   }
   .post-description {
     max-width: 578px;
@@ -75,12 +80,13 @@ if (limit) {
 
   @media screen and (max-width: 768px) {
     section {
-      margin-bottom: .5rem;
+      margin-bottom: 0.5rem;
     }
     .post-title {
       font-size: var(--fs-100);
     }
-    .post-date, .post-description {
+    .post-date,
+    .post-description {
       font-size: var(--fs-50);
     }
   }

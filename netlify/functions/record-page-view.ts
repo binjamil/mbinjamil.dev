@@ -1,4 +1,4 @@
-import { Handler } from '@netlify/functions'
+import type { Handler } from '@netlify/functions'
 import { withPlanetscale } from '@netlify/planetscale';
 
 export const handler: Handler = withPlanetscale(async (event, context) => {
