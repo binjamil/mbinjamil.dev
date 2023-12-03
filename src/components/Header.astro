@@ -301,17 +301,40 @@ import { SITE_TITLE } from "../consts";
 
       window.localStorage.setItem("theme", theme);
 
+    function handleImageToggle() {
+      const isDark = document.querySelector("html")?.classList.contains("dark");
+      if (isDark) {
+        for (let el of document.querySelectorAll(".lightImage")) {
+          el.style.display = "none";
+        }
+        for (let el of document.querySelectorAll(".darkImage")) {
+          el.style.display = "block";
+        }
+      } else {
+        for (let el of document.querySelectorAll(".darkImage")) {
+          el.style.display = "none";
+        }
+        for (let el of document.querySelectorAll(".lightImage")) {
+          el.style.display = "block";
+        }
+      }
+    }
+
+    handleImageToggle();
+
       const handleToggleClick = () => {
         if (document.startViewTransition) {
           document.startViewTransition(() => {
             document.documentElement.classList.toggle("dark");
             const isDark = document.documentElement.classList.contains("dark");
             localStorage.setItem("theme", isDark ? "dark" : "light");
+    handleImageToggle();
           });
         } else {
           document.documentElement.classList.toggle("dark");
           const isDark = document.documentElement.classList.contains("dark");
           localStorage.setItem("theme", isDark ? "dark" : "light");
+    handleImageToggle();
         }
       };
 

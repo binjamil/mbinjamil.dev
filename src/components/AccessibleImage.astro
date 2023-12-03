@@ -19,33 +19,3 @@ const { name, alt, width } = Astro.props;
   width={width}
 />
 
-<script>
-  function setupImage() {
-    function handleImageToggle() {
-      const isDark = document.querySelector("html")?.classList.contains("dark");
-      if (isDark) {
-        for (let el of document.querySelectorAll(".lightImage")) {
-          el.style.display = "none";
-        }
-        for (let el of document.querySelectorAll(".darkImage")) {
-          el.style.display = "block";
-        }
-      } else {
-        for (let el of document.querySelectorAll(".darkImage")) {
-          el.style.display = "none";
-        }
-        for (let el of document.querySelectorAll(".lightImage")) {
-          el.style.display = "block";
-        }
-      }
-    }
-
-    handleImageToggle();
-
-    const themeToggle = document.getElementById("themeToggle");
-    if (themeToggle) themeToggle.addEventListener("click", handleImageToggle);
-  }
-
-  setupImage();
-  document.addEventListener("astro:after-swap", setupImage);
-</script>
