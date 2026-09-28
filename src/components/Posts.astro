@@ -2,56 +2,36 @@
 import { getCollection } from "astro:content";
 
 type Props = {
-  sort?: {
-    field: "date" | "views";
-    order: "desc" | "asc";
-  };
   limit?: number;
   detailed?: boolean;
 };
 
-const { sort, limit, detailed } = Astro.props;
+const { limit, detailed } = Astro.props;
 
 let writings = await getCollection("writings");
-writings = writings.filter((p) => !!p); // hack to mitigate undefined posts returned by getCollection in astro build. open an issue if not fixed after some time
-writings.sort((e1, e2) => {
-  if (e1.data.pubDate > e2.data.pubDate) {
-    return -1;
-  } else if (e1.data.pubDate < e2.data.pubDate) {
-    return 1;
-  } else {
-    return 0;
-  }
-});
-if (limit) {
-  writings.length = limit;
-}
+writings.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+if (limit !== undefined) writings = writings.slice(0, limit);
 ---
 
 <section class="container">
   <div class="posts">
-    {
-      writings.map((p) => (
-        <div>
-          <p
-            class="post-title"
-            class:list={["post-title", { "font-bold": detailed }]}
-          >
-            <a href={"/writings/" + p.slug}>{p.data.title}</a>
-          </p>
-          <p class="post-date">
-            <time datetime={p.data.pubDate.toISOString()}>
-              {p.data.pubDate.toLocaleDateString("en-us", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </time>
-          </p>
-          {detailed && <p class="post-description">{p.data.description}</p>}
-        </div>
-      ))
-    }
+    {writings.map((p) => (
+      <div>
+        <p class:list={["post-title", { "font-bold": detailed }]}>
+          <a href={"/writings/" + p.id}>{p.data.title}</a>
+        </p>
+        <p class="post-date">
+          <time datetime={p.data.pubDate.toISOString()}>
+            {p.data.pubDate.toLocaleDateString("en-us", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </time>
+        </p>
+        {detailed && <p class="post-description">{p.data.description}</p>}
+      </div>
+    ))}
   </div>
 </section>
 

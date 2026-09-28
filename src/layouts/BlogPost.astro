@@ -7,11 +7,12 @@ import FormattedDate from "../components/FormattedDate.astro";
 import toSnakeCase from "../utils/snake-case";
 import { SITE_TITLE } from "../consts";
 
-type Props = CollectionEntry<"writings">["data"] & {slug: string};
+type Props = CollectionEntry<"writings">["data"];
 
-const { title, description, pubDate, toc, slug } = Astro.props;
+const { title, description, pubDate, toc } = Astro.props;
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={title + " | " + SITE_TITLE} description={description} />
@@ -22,40 +23,35 @@ const { title, description, pubDate, toc, slug } = Astro.props;
     <main>
       <article>
         <div class="container">
-            <div class="frontmatter">
-              <p class="back-link"><a href="/writings">&#8592; Back to all writings</a></p>
-              <FormattedDate date={pubDate} />
-              <h1>{title}</h1>
-            </div>
+          <div class="frontmatter">
+            <p class="back-link">
+              <a href="/writings">&#8592; Back to all writings</a>
+            </p>
+            <FormattedDate date={pubDate} />
+            <h1>{title}</h1>
+          </div>
         </div>
         <div class="container">
-
           <div class="post">
             <slot />
           </div>
           <div class="toc">
             <p>On this page</p>
             <ul>
-              {
-                toc.map((heading) => (
-                  <div class="outer-li">
-                    <li>
-                      <a href={`#${toSnakeCase(heading.parent)}`}>
-                        {heading.parent}
-                      </a>
-                    </li>
-                    <ul class="nested-list">
-                      {heading.children?.map((subheading) => (
-                        <li>
-                          <a href={`#${toSnakeCase(subheading)}`}>
-                            {subheading}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))
-              }
+              {toc.map((heading) => (
+                <li class="outer-li">
+                  <a href={`#${toSnakeCase(heading.parent)}`}>
+                    {heading.parent}
+                  </a>
+                  <ul class="nested-list">
+                    {heading.children?.map((subheading) => (
+                      <li>
+                        <a href={`#${toSnakeCase(subheading)}`}>{subheading}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -63,26 +59,6 @@ const { title, description, pubDate, toc, slug } = Astro.props;
       <Footer />
     </main>
   </body>
-  <script define:vars={{ slug }}>
-    async function recordPageView() {
-      const resGeo = await fetch("/edge/geo");
-      const geoData = await resGeo.json();
-
-      await fetch("/api/record-page-view", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          slug,
-          ...geoData,
-        }),
-      });
-    }
-
-    recordPageView();
-  </script>
-
   <style>
     article {
       margin-block: 1.5rem;

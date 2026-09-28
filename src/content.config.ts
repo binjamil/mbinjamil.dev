@@ -1,7 +1,12 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const writings = defineCollection({
-  // Type-check frontmatter using a schema
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/writings",
+  }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -13,7 +18,7 @@ const writings = defineCollection({
       z.object({
         parent: z.string(),
         children: z.array(z.string()).optional(),
-      })
+      }),
     ),
   }),
 });

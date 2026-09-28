@@ -201,3 +201,20 @@ a:hover {
 .font-bold {
   font-weight: bold;
 }
+
+/* Keep themed images correct before scripts run and after navigation. */
+html:not(.dark) .darkImage,
+html.dark .lightImage {
+  display: none;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
