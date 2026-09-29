@@ -1,9 +1,11 @@
+name: terraform
+
 on:
   push:
     branches: [main]
 
 jobs:
-  terraform:
+  apply:
     runs-on: ubuntu-latest
 
     defaults:
